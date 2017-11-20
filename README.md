@@ -6,7 +6,7 @@ hluti fyrir mismunandi verð og mun leikurinn snúast um að afla sem mestum fj�
 sem breyta gengi hluta umtalsvert en einnig munu verð breytast eftir því á hvaða verði notendur kaupa og selja og þriðji parturinn sem 
 hefur áhrif á gengi er hvernig hlutnum gengur (fréttir hafa mikil áhrif á þetta).
 ### balancing
-..* Það munu vera limits fyrir því hversu mikið spilendur geta ráðið verðinu við hverja færslu til að koma í
+⋅⋅* Það munu vera limits fyrir því hversu mikið spilendur geta ráðið verðinu við hverja færslu til að koma í
 veg fyrir markaðsmisnotkun og þannig að fréttir og gengi hlutna hafi áhrif á leikinn.
 ..* Mögulega mun vera banki sem við getum notað til að jafna leikinn út og flýta fyrir hlutum ef þess þarf. t.d. gæti bankinn keypt hluti undir
 markaðsverði ef við sjáum að hlutir seljast mjög hægt eða hann mundi selja hluti rétt yfir markaðsverð fyrir sömu ástæðum. Mögulega hægt að
