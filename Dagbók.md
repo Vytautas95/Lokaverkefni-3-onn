@@ -13,5 +13,6 @@ Bjuggum til gagnagrunninn
 Bjuggum til loggin siðu
 ### 11/24/2017
 Bjuggum til Admin aðgang
+
 ---
 Vytautas Sipavicius og Fannar Hrafn
