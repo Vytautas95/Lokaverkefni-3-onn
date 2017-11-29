@@ -1,0 +1,43 @@
+DROP DATABASE IF EXITS 1503953219_Lokaverkefni_3_onn;
+CREATE DATABASE 1503953219_Lokaverkefni_3_onn;
+USE 1503953219_Lokaverkefni_3_onn;
+CREATE TABLE user(
+    UserID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Current_Cash INT NOT NULL DEFAULT "100000" ,
+    Total_Value INT,
+    Bot TINYINT(1) NOT NULL
+);
+
+CREATE TABLE User_info(
+    UserID INT PRIMARY KEY NOT NULL,
+    Username VARCHAR(255) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    FOREIGN KEY (UserID) REFERENCES user(UserID)
+);
+CREATE TABLE Bot_info(
+    UserID INT PRIMARY KEY NOT NULL,
+    Upper_sell_risk DECIMAL(4,2) NOT NULL,
+    Lower_sell_risk DECIMAL(4,2) NOT NULL,
+    Buy_risk DECIMAL (4,2),
+    FOREIGN KEY (UserID) REFERENCES user(UserID)
+);
+CREATE TABLE stock(
+    StockID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    Original_market_price INT NOT NULL,
+    Current_market_price INT,
+    Last_percent_change DECIMAL(4,2),
+    Normal_percent_change DECIMAL(4,2) NOT NULL,
+    UserID INT,
+    Status TINYINT(1),
+    Sale_price INT,
+    FOREIGN KEY (UserID) REFERENCES user(UserID)
+);
+CREATE TABLE Transaction(
+    TransactionID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    Price INT NOT NULL,
+    BuyerID INT NOT NULL,
+    SellerID INT NOT NULL,
+    FOREIGN KEY (BuyerID) REFERENCES user(UserID),
+    FOREIGN KEY (SellerID) REFERENCES user(UserID)
+);
