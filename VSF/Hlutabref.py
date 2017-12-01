@@ -4,7 +4,6 @@ import pymysql
 from bottle import *
 import datetime
 from Classes.Bots import *
-
 #bý til index sem skilar síðu þar sem hægt er að skrá sig inn / skrá nýjan user
 @route('/')
 def index():
@@ -128,10 +127,10 @@ def stocks():
     return template('stocks.tpl',stocklisti=stocklisti,stockfj=stockfj)
 
 
-@route('/admin')
+@route('/admin',method='POST')
 def admin():
     return template('admin.tpl')
-@route('/bots', method='POST')
+@route('/bots',method='POST')
 def bots():
     #opna tengingu við sql database
     conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
@@ -145,7 +144,7 @@ def bots():
     buyrisk=int(request.forms.get('buyrisk'))
     print(botsfj, upperrisk, lowerrisk, buyrisk)
     for x in range(botsfj):
-        y=Bots(nr, upperrisk,lowerrisk, buyrisk)
+        y=Bots(upperrisk,lowerrisk, buyrisk)
         y.newbot()
 
 run()
