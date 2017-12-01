@@ -4,7 +4,7 @@
 	<title>Admin</title>
 </head>
 <body>
-<form action="/bots">
+<form action="/bots" method='POST'>
 	<h3>Fjöldi bots</h3>
 	<input type="number" name="botfj">
 	<h3>upper risk</h3>
