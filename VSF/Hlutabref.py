@@ -138,11 +138,12 @@ def bots():
                            db='1503953219_lokaverkefni_3_onn')
     cur = conn.cursor()
     cur.execute("SELECT MAX(UserID) FROM user")
-    nr = cur.fetchone() + 1
+    nr = cur.fetchone()[0] + 1
     botsfj=request.forms.get('botsfj')
     upperrisk=request.forms.get('upperrisk')
     lowerrisk=request.forms.get('lowerrisk')
     buyrisk=request.forms.get('buyrisk')
+    print(upperrisk, lowerrisk, buyrisk)
     for x in range(botsfj):
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
