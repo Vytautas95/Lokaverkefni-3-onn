@@ -3,7 +3,7 @@
 import pymysql
 from bottle import *
 import datetime
-from Classes import *
+from Classes.Bots import *
 
 #bý til index sem skilar síðu þar sem hægt er að skrá sig inn / skrá nýjan user
 @route('/')
@@ -131,7 +131,7 @@ def stocks():
 @route('/admin')
 def admin():
     return template('admin.tpl')
-@route('/bots')
+@route('/bots', method='POST')
 def bots():
     #opna tengingu við sql database
     conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
@@ -139,11 +139,11 @@ def bots():
     cur = conn.cursor()
     cur.execute("SELECT MAX(UserID) FROM user")
     nr = cur.fetchone()[0] + 1
-    botsfj=request.forms.get('botsfj')
-    upperrisk=request.forms.get('upperrisk')
-    lowerrisk=request.forms.get('lowerrisk')
-    buyrisk=request.forms.get('buyrisk')
-    print(upperrisk, lowerrisk, buyrisk)
+    botsfj=int(request.forms.get('botfj'))
+    upperrisk=int(request.forms.get('upperrisk'))
+    lowerrisk=int(request.forms.get('lowerrisk'))
+    buyrisk=int(request.forms.get('buyrisk'))
+    print(botsfj, upperrisk, lowerrisk, buyrisk)
     for x in range(botsfj):
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
