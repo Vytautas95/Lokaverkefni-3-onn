@@ -122,9 +122,19 @@ def stocks():
     stocklisti=[]
     for row in cur:
         stocklisti.append(row)
-    cur.execute("SELECT count(*) FROM stock")
+    cur.execute("SELECT count(name) FROM stock")
+    nr = stocklisti[0]
+    nafn = stocklisti[1]
+    ogprice = stocklisti[2]
+    curprice = stocklisti[3]
+    lpercentchange = stocklisti[4]
+    normalpercentchange = stocklisti[5]
+    owner = stocklisti[6]
+    stada = stocklisti[7]
+    price = stocklisti[8]
+    print(nr, owner)
     stockfj=cur.fetchone()
-    return template('stocks.tpl',stocklisti=stocklisti,stockfj=stockfj)
+    return template('stocks.tpl', nr = nr, nafn = nafn, ogprice = ogprice, curprice = curprice, lpercentchage = lpercentchange, normalpercentchange = normalpercentchange, owner = owner, stada = stada, price = price, stockfj = stockfj)
 
 
 @route('/admin',method='POST')
