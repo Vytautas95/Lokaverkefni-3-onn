@@ -97,10 +97,10 @@ def login():
             #birti síða þar sem notanda tókst að logga inn
             redirect('/stocks')
     #ef að return var ekki gefið í for loop þá þýðir það að við erum komnir hingað
-    #þá loka ég öllu og birti síðu sem segir notanda að honum tókst ekki að logga inn
+    #þá loka ég öllu og birti sendi aftur á index
     cur.close()
     conn.close()
-    redirect('/stocks')
+    redirect('/')
 
 
 @route('/logout')
