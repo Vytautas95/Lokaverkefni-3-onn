@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="stylesheet"  href="/static/stylesheet.css">
 	<title>verkefni 10</title>
 </head>
 <body>
