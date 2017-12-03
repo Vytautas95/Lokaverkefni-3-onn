@@ -13,6 +13,8 @@ Bjuggum til gagnagrunninn
 Bjuggum til loggin siðu
 ### 11/24/2017
 Bjuggum til Admin aðgang
+### 3/12/2017
+Létum síðu á heroku, gerðum css, gerðum skýrslu fyrir VSF og skiluðum fyrir VSF
 
 ---
 Vytautas Sipavicius og Fannar Hrafn
