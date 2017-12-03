@@ -4,6 +4,7 @@ import pymysql
 from bottle import *
 import datetime
 from Classes.Bots import *
+import os
 #bý til index sem skilar síðu þar sem hægt er að skrá sig inn / skrá nýjan user
 @route('/')
 def index():
@@ -177,4 +178,4 @@ def bots():
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
 
-run()
+run(host = '0.0.0.0', port=os.environ.get('PORT'))
