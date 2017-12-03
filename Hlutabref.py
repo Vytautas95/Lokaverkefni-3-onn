@@ -18,7 +18,7 @@ def index():
         #athuga hverja línu hvort username og password passi með for loop
         for row in cur:
             #athuga hverja línu hvort username og password passi
-            if row[0]==request.get_cookie("login") and request.get_cookie("password")==row[1]:
+            if row[1]==request.get_cookie("login") and request.get_cookie("password")==row[2]:
                 #loka öllu
                 cur.close()
                 conn.close()
@@ -137,7 +137,7 @@ def stocks(id):
     currprice = stock[3]
     lpercent = stock[4]
     owner = stock[5]
-    if owner == "None":
+    if owner == None:
         owner = "Markaður"
     status = stock[6]
     sprice = stock[7]
@@ -177,5 +177,11 @@ def bots():
     for x in range(botsfj):
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
+
+
+#bendi á static skráina og að allt í henni sé static
+@route('/static/<filename>')
+def static(filename):
+    return static_file(filename, root='./static')
 
 run(host = '0.0.0.0', port=os.environ.get('PORT'))
