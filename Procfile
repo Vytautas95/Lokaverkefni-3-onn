@@ -1,1 +1,1 @@
-web: python Hlutabref --pythonpath VSF.Hlutabref
+web: python VSF.Hlutabref.py
