@@ -12,7 +12,7 @@ def index():
         conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
                                db='1503953219_lokaverkefni_3_onn')
         cur = conn.cursor()
-        #næ í allt úr userbasebase
+        #næ í allt úr user_info
         cur.execute("SELECT * FROM user_info")
         #athuga hverja línu hvort username og password passi með for loop
         for row in cur:
@@ -39,12 +39,12 @@ def newuser():
     newpass=request.forms.get('newpass')
     #sql query sem er count fyrir hversu oft newuser kemur fyrir
     #nota það query í raun til að vita hvort user er þegar til eða ekki
-    cur.execute("SELECT count(*) FROM user_info where username='{}'".format(newuser))
-    #næ í þessa einu línu
-    user = cur.fetchone()
+    cur.execute("SELECT count(username) FROM user_info where username='{}'".format(newuser))
+    #næ í þessa einu tölu
+    user = cur.fetchone()[0]
     #user er lína úr database, athuga fyrsta stak sem er username stakið hvort það er til eða ekki
     #username stakið er = 1 ef newuser er þegar til því ég bað um count(*) í query
-    if user[0] <= 1:
+    if user >= 1:
         #loka öllu
         cur.close()
         conn.close()
@@ -53,9 +53,11 @@ def newuser():
     #ef user er ekki til þá bý ég hann til
     else:
         #bæti við nýjum user í database
-        cur.execute("INSERT INTO User(bot) Values('{}'".format(1))
+        cur.execute("INSERT INTO User(bot) Values('{}')".format(1))
+        #Sæki hæsta id til að finna nýjasta notendann(þann sem við erum að búa til)
         cur.execute("SELECT MAX(UserID) FROM user")
-        currentid = cur.fetchone()
+        #Nota það id til að bæta við password og username upplýsingum við réttan notenda
+        currentid = cur.fetchone()[0]
         cur.execute("INSERT INTO User_info Values('{}','{}','{}')".format(currentid,newuser,newpass))
         conn.commit()
         #loka öllu

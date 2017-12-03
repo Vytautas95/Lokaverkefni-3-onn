@@ -4,7 +4,7 @@ USE 1503953219_Lokaverkefni_3_onn;
 CREATE TABLE user(
     UserID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     Current_Cash INT NOT NULL DEFAULT "100000" ,
-    Total_Value INT,
+    Total_Value INT DEFAULT "100000",
     Bot TINYINT(1) NOT NULL
 );
 
