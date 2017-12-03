@@ -1,1 +1,1 @@
-web: python VSF/Hlutabref.py
+web: python Hlutabref.py
