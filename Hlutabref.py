@@ -23,7 +23,7 @@ def index():
                 cur.close()
                 conn.close()
                 #birti síða þar sem notanda tókst að logga inn
-                redirect('/stocks')
+                redirect('/stocks/1')
     else:
         return template('index.tpl')
 
