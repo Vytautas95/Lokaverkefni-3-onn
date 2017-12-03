@@ -1,0 +1,26 @@
+body {
+	max-width: 30em;
+	margin: auto;
+	margin-top: 8em;
+	color: red;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+	background: grey;
+	border:solid blue;
+	padding: 2em;
+}
+
+.usercontainer {
+	height: 10em;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	color: green;
+}
+
+.childcontainer {
+	margin: auto;
+	width: 10em;
+	height: 5em;
+	margin: auto;
+}
