@@ -84,20 +84,17 @@ def login():
     #athuga hverja línu hvort username og password passi með for loop
     for row in cur:
         #athuga hverja línu hvort username og password passi
-        if row[0]==username and row[1]==password:
-            #loka öllu
-            cur.close()
-            conn.close()
+        if row[1]==username and row[2]==password:
             #bý til tímabil fyrir cookies
             timabil=datetime.datetime.now() + datetime.timedelta(days=30)
             #set cookies fyrir login info
-            response.set_cookie("login",row[0],expires=timabil)
-            response.set_cookie("password",row[1],expires=timabil)
-            cur.execute("SELECT UserID FROM User_info WHERE Username =  {}").format(row[0])
-            userid=cur.fetchone()
-            response.set_cookie("UserID",userid,expires=timabil)
+            response.set_cookie("login",row[1],expires=timabil)
+            response.set_cookie("password",row[2],expires=timabil)
+            cur.execute("SELECT UserID FROM User_info WHERE Username =  '%s'" %(username))
+            userid=cur.fetchone()[0]
+            response.set_cookie("UserID",str(userid),expires=timabil)
             #birti síða þar sem notanda tókst að logga inn
-            redirect('/stocks')
+            redirect('/stocks/1')
     #ef að return var ekki gefið í for loop þá þýðir það að við erum komnir hingað
     #þá loka ég öllu og birti sendi aftur á index
     cur.close()
@@ -114,21 +111,52 @@ def logout():
     response.set_cookie("UserID","",expires=0)
     redirect('/')
 
-
-@route('/stocks')
-def stocks():
+#Dynamic route sem sýnir mismunandi stocks eftir því hvar í routinu hann er
+@route('/stocks/<id:int>')
+def stocks(id):
+    #Sækja userid úr cookie til að vita hvað notandi er loggaður inn
+    CurrentID = int(request.get_cookie("UserID"))
+    #tengjast við gagnagrunninn
     conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
                            db='1503953219_lokaverkefni_3_onn')
     cur = conn.cursor()
-    cur.execute("SELECT * FROM stock")
-    stocklisti=[]
-    for row in cur:
-        stocklisti.append(row)
-    cur.execute("SELECT count(*) FROM stock")
-    stockfj=cur.fetchone()
-    return template('stocks.tpl',stocklisti=stocklisti,stockfj=stockfj)
+    #Sækja upplýsingar um notendann
+    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %CurrentID)
+    userinfo = cur.fetchone()
+    name = userinfo[0]
+    cash = userinfo[1]
+    value = userinfo[2]
+    #Sækja upplýsingar um það hlutabréf sem er til skoðunar
+    cur.execute("SELECT StockID, Name, Original_market_price, Current_market_price, Last_percent_change, UserID, Status, "
+    + "Sale_price FROM stock WHERE StockID = %d" %id)
+    stock=cur.fetchone()
+    sid = stock[0]
+    sname = stock[1]
+    ogprice = stock[2]
+    currprice = stock[3]
+    lpercent = stock[4]
+    owner = stock[5]
+    if owner == "None":
+        owner = "Markaður"
+    status = stock[6]
+    sprice = stock[7]
+    if status == 1:
+        status = "On sale"
+    else:
+        status = "Not for sale"
+        sprice = "Ekki til sölu"
+    cur.execute("SELECT COUNT(StockID) FROM stock ")
+    max_id = cur.fetchone()[0]
+    nid = sid + 1
+    if max_id < nid:
+        nid = sid
+    #loka connectioninu
+    cur.close()
+    conn.close()
 
-
+    return template('stocks.tpl', name = name, cash = cash, value = value, sname = sname, ogprice = ogprice,
+                    currprice = currprice, lpercent = lpercent, owner = owner, status = status, sprice = sprice,
+                    nid = nid)
 @route('/admin',method='POST')
 def admin():
     return template('admin.tpl')
