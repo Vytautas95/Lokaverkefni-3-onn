@@ -178,10 +178,27 @@ def bots():
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
 
+@route('/stocks', method='POST')
+def stocks():
+    # opna tengingu við sql database
+    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
+                               db='1503953219_lokaverkefni_3_onn')
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(StockID) FROM stock")
+    nr = cur.fetchone()[0] + 1
+    stockfj = int(request.forms.get('stockfj'))
+    name = int(request.forms.get('name'))
+    market_price = int(request.forms.get('lowerrisk'))
+    buyrisk = int(request.forms.get('buyrisk'))
+    print(botsfj, upperrisk, lowerrisk, buyrisk)
+    for x in range(stockfj):
+        y = stocks(nr, name, market_price, normal_percent_change)
+        y.newstock()
+
 
 #bendi á static skráina og að allt í henni sé static
 @route('/static/<filename>')
 def static(filename):
     return static_file(filename, root='./static')
 
-run(host = '0.0.0.0', port=os.environ.get('PORT'))
+run()
