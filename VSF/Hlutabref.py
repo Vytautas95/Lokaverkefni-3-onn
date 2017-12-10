@@ -137,7 +137,7 @@ def stocks(id):
     currprice = stock[3]
     lpercent = stock[4]
     owner = stock[5]
-    if owner == None:
+    if owner == 4:
         owner = "Markaður"
     status = stock[6]
     sprice = stock[7]

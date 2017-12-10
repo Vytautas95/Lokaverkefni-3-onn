@@ -41,3 +41,6 @@ CREATE TABLE Transaction(
     FOREIGN KEY (BuyerID) REFERENCES user(UserID),
     FOREIGN KEY (SellerID) REFERENCES user(UserID)
 );
+USE 1503953219_lokaverkefni_3_onn;
+ALTER TABLE stock
+ALTER COLUMN UserID SET DEFAULT 4;
