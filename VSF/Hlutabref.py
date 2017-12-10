@@ -149,15 +149,18 @@ def stocks(id):
     cur.execute("SELECT COUNT(StockID) FROM stock ")
     max_id = cur.fetchone()[0]
     nid = sid + 1
+    lid = sid - 1
     if max_id < nid:
         nid = sid
+    if sid == 1:
+        lid = 1
     #loka connectioninu
     cur.close()
     conn.close()
 
     return template('stocks.tpl', name = name, cash = cash, value = value, sname = sname, ogprice = ogprice,
                     currprice = currprice, lpercent = lpercent, owner = owner, status = status, sprice = sprice,
-                    nid = nid)
+                    nid = nid, lid = lid)
 @route('/admin',method='POST')
 def admin():
     return template('admin.tpl')
@@ -173,7 +176,6 @@ def bots():
     upperrisk=int(request.forms.get('upperrisk'))
     lowerrisk=int(request.forms.get('lowerrisk'))
     buyrisk=int(request.forms.get('buyrisk'))
-    print(botsfj, upperrisk, lowerrisk, buyrisk)
     for x in range(botsfj):
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
@@ -190,7 +192,6 @@ def stocks():
     name = int(request.forms.get('name'))
     market_price = int(request.forms.get('lowerrisk'))
     buyrisk = int(request.forms.get('buyrisk'))
-    print(botsfj, upperrisk, lowerrisk, buyrisk)
     for x in range(stockfj):
         y = stocks(nr, name, market_price, normal_percent_change)
         y.newstock()

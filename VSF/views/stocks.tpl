@@ -24,7 +24,7 @@
 <h2>Síðasta prósentu breyting: {{lpercent}}%</h2>
 <h2>Eigandi: {{owner}}</h2>
 <h2>Verð: {{sprice}}</h2>
-<a href="/stocks/{{nid}}">Skoða næsta</a>
+<p><a href="/stocks/{{lid}}">Skoða seinasta</a> <a href="/stocks/{{nid}}">Skoða næsta</a></p>
 
 </body>
 </html>
