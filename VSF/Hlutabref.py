@@ -161,7 +161,7 @@ def stocks(id):
     return template('stocks.tpl', name = name, cash = cash, value = value, sname = sname, ogprice = ogprice,
                     currprice = currprice, lpercent = lpercent, owner = owner, status = status, sprice = sprice,
                     nid = nid, lid = lid)
-@route('/admin',method='POST')
+@route('/admin')
 def admin():
     return template('admin.tpl')
 @route('/bots',method='POST')
@@ -179,23 +179,18 @@ def bots():
     for x in range(botsfj):
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
+    return '''Skráning tókst!, <a href="/admin">Fara til baka</a>"'''
 
 @route('/stocks', method='POST')
 def stocks():
-    # opna tengingu við sql database
-    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
-                               db='1503953219_lokaverkefni_3_onn')
-    cur = conn.cursor()
-    cur.execute("SELECT MAX(StockID) FROM stock")
-    nr = cur.fetchone()[0] + 1
     stockfj = int(request.forms.get('stockfj'))
-    name = int(request.forms.get('name'))
-    market_price = int(request.forms.get('lowerrisk'))
-    buyrisk = int(request.forms.get('buyrisk'))
+    name = request.forms.get('name')
+    market_price = int(request.forms.get('mprice'))
+    normal_percent_change = int(request.forms.get('npchange'))
     for x in range(stockfj):
-        y = stocks(nr, name, market_price, normal_percent_change)
+        y = Stocks(name, market_price, normal_percent_change)
         y.newstock()
-
+    return '''Skráning tókst!, <a href="/admin">Fara til baka</a>'''
 
 #bendi á static skráina og að allt í henni sé static
 @route('/static/<filename>')

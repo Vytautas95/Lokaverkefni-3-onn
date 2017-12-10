@@ -15,6 +15,17 @@
 	<input type="number" name="buyrisk">
 	<input type="submit" name="skapa">
 </form>
+<form action="/stocks" method='POST'>
+	<h3>Fjöldi Hlutabréfa</h3>
+	<input type="number" name="stockfj">
+	<h3>Heiti</h3>
+	<input type="text" name="name"> 
+	<h3>Markaðsverð</h3>
+	<input type="number" name="mprice">
+	<h3>Upphafleg prósentubreyting</h3>
+	<input type="number" name="npchange">
+	<input type="submit" name="skapa">
+</form>
 <form action="/">
 	<input type="submit" name="logout">
 </form>
