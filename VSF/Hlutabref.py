@@ -92,8 +92,8 @@ def login():
             response.set_cookie("login",row[1],expires=timabil)
             response.set_cookie("password",row[2],expires=timabil)
             cur.execute("SELECT UserID FROM User_info WHERE Username =  '%s'" %(username))
+            global userid
             userid=cur.fetchone()[0]
-            response.set_cookie("UserID",str(userid),expires=timabil)
             #birti síða þar sem notanda tókst að logga inn
             redirect('/stocks/1')
     #ef að return var ekki gefið í for loop þá þýðir það að við erum komnir hingað
@@ -115,31 +115,43 @@ def logout():
 #Dynamic route sem sýnir mismunandi stocks eftir því hvar í routinu hann er
 @route('/stocks/<id:int>')
 def stocks(id):
-    #Sækja userid úr cookie til að vita hvað notandi er loggaður inn
-    CurrentID = int(request.get_cookie("UserID"))
     #tengjast við gagnagrunninn
     conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
                            db='1503953219_lokaverkefni_3_onn')
     cur = conn.cursor()
-    #Sækja upplýsingar um notendann
-    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %CurrentID)
+    #Sækja upplýsingar um notendann og set pening sem global breytu þar sem við gætum þurft að nota hana seinna
+    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %userid)
     userinfo = cur.fetchone()
     name = userinfo[0]
+    global cash
     cash = userinfo[1]
     value = userinfo[2]
-    #Sækja upplýsingar um það hlutabréf sem er til skoðunar
+    #Sækja upplýsingar um það hlutabréf sem er til skoðunar, set Stock id, verð og owner id sem global breytur því við þurfum að nota þær í öðru routi
     cur.execute("SELECT StockID, Name, Original_market_price, Current_market_price, Last_percent_change, UserID, Status, "
     + "Sale_price FROM stock WHERE StockID = %d" %id)
     stock=cur.fetchone()
+    global sid
     sid = stock[0]
     sname = stock[1]
     ogprice = stock[2]
     currprice = stock[3]
     lpercent = stock[4]
+    global owner
     owner = stock[5]
-    if owner == 4:
-        owner = "Markaður"
+    ownername = owner
+    if ownername == 4:
+        ownername = "Markaður"
+    else:
+        cur.execute("SELECT bot FROM user WHERE UserID = %d" % ownername)
+        bot = cur.fetchone()[0]
+        print(bot)
+        if bot == 1:
+            cur.execute("SELECT Username FROM user_info WHERE UserID = %d" % ownername)
+            ownername = cur.fetchone()[0]
+        else:
+            ownername = "Bot" + str(ownername)
     status = stock[6]
+    global sprice
     sprice = stock[7]
     if status == 1:
         status = "On sale"
@@ -157,10 +169,23 @@ def stocks(id):
     #loka connectioninu
     cur.close()
     conn.close()
-
     return template('stocks.tpl', name = name, cash = cash, value = value, sname = sname, ogprice = ogprice,
-                    currprice = currprice, lpercent = lpercent, owner = owner, status = status, sprice = sprice,
+                    currprice = currprice, lpercent = lpercent, owner = ownername, status = status, sprice = sprice,
                     nid = nid, lid = lid)
+@route('/kaupa', method='POST')
+def kaupa():
+    if sprice == "Ekki til Sölu":
+        return '''Þetta hlutabréf er ekki til sölu <a href="/stocks/%d">Fara til baka</a> ''' %sid
+    elif sprice > cash:
+        return '''Þú átt ekki nóg af pening til að kaupa þetta hlutabréf <a href="/stocks/%d">Fara til baka</a> ''' %sid
+    else:
+        # tengjast við gagnagrunninn
+        conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
+                               db='1503953219_lokaverkefni_3_onn')
+        cur = conn.cursor()
+        cur.execute("INSERT INTO transaction(Price, BuyerID, SellerID, StockID) Values('{}','{}','{}', '{}')".format(sprice, userid, owner, sid))
+        conn.commit()
+        return '''Kaup staðfest! <a href="/stocks/%d">Fara til baka</a>''' %sid
 @route('/admin')
 def admin():
     return template('admin.tpl')

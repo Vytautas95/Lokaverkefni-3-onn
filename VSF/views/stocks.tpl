@@ -9,7 +9,7 @@
 	<div class="childcontainer">
 		<h3>Notandi: {{name}}</h3>
 		<form action="/logout">
-			<input value="Skrá út" type="submit">
+			<input value="skrá út" type="submit">
 		</form>
 	</div>
 	<h3  class="childcontainer">
@@ -24,6 +24,9 @@
 <h2>Síðasta prósentu breyting: {{lpercent}}%</h2>
 <h2>Eigandi: {{owner}}</h2>
 <h2>Verð: {{sprice}}</h2>
+<form action="/kaupa" method='POST'>
+	<input value="Kaupa" type="submit">
+</form>
 <p><a href="/stocks/{{lid}}">Skoða seinasta</a> <a href="/stocks/{{nid}}">Skoða næsta</a></p>
 
 </body>

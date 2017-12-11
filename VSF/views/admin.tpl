@@ -13,7 +13,7 @@
 	<input type="number" name="lowerrisk">
 	<h3>buy risk</h3>
 	<input type="number" name="buyrisk">
-	<input type="submit" name="skapa">
+	<input type="submit" value="skapa">
 </form>
 <form action="/stocks" method='POST'>
 	<h3>Fjöldi Hlutabréfa</h3>
@@ -24,10 +24,10 @@
 	<input type="number" name="mprice">
 	<h3>Upphafleg prósentubreyting</h3>
 	<input type="number" name="npchange">
-	<input type="submit" name="skapa">
+	<input type="submit" value="skapa">
 </form>
 <form action="/">
-	<input type="submit" name="logout">
+	<input type="submit" value="skrá út">
 </form>
 </body>
 </html>
