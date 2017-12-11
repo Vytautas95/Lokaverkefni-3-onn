@@ -2,7 +2,7 @@
 <html>
 <head>
 	<link rel="stylesheet"  href="/static/stylesheet.css">
-	<title>Stocks</title>
+	<title>Mín Stocks</title>
 </head>
 <body>
 <div class="usercontainer">
@@ -11,8 +11,8 @@
 		<form action="/logout">
 			<input value="skrá út" type="submit">
 		</form>
-		<form action="/minbref/1">
-			<input value="skoða mín hlutabréf" type="submit">
+		<form action="/stocks/1">
+			<input value="skoða öll hlutabréf" type="submit">
 		</form>
 	</div>
 	<h3  class="childcontainer">
@@ -27,10 +27,11 @@
 <h2>Síðasta prósentu breyting: {{lpercent}}%</h2>
 <h2>Eigandi: {{owner}}</h2>
 <h2>Verð: {{sprice}}</h2>
-<form action="/kaupa" method='POST'>
-	<input value="Kaupa" type="submit">
+<form action="/selja" method='POST'>
+	<input type="number" name="price">
+	<input value="Setja á sölu" type="submit">
 </form>
-<p><a href="/stocks/{{lid}}">Skoða seinasta</a> <a href="/stocks/{{nid}}">Skoða næsta</a></p>
+<p><a href="/minbref/{{lid}}">Skoða seinasta</a> <a href="/minbref/{{nid}}">Skoða næsta</a></p>
 
 </body>
 </html>
