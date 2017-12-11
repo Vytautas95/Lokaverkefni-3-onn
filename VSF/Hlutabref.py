@@ -186,6 +186,54 @@ def kaupa():
         cur.execute("INSERT INTO transaction(Price, BuyerID, SellerID, StockID) Values('{}','{}','{}', '{}')".format(sprice, userid, owner, sid))
         conn.commit()
         return '''Kaup staðfest! <a href="/stocks/%d">Fara til baka</a>''' %sid
+@route('/minbref/<id:int>')
+def minbref(id):
+    #tengjast við gagnagrunninn
+    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
+                           db='1503953219_lokaverkefni_3_onn')
+    cur = conn.cursor()
+    #Sækja upplýsingar um notendann
+    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %userid)
+    userinfo = cur.fetchone()
+    name = userinfo[0]
+    cash = userinfo[1]
+    value = userinfo[2]
+    #Sækja upplýsingar um það hlutabréf sem er til skoðunar
+    cur.execute("SELECT StockID, Name, Original_market_price, Current_market_price, Last_percent_change, UserID, Status, "
+    + "Sale_price FROM stock WHERE UserID = %d" %userid)
+    usedid = id - 1
+    stock=cur.fetchall()[usedid]
+    print(stock)
+    sid = stock[0]
+    sname = stock[1]
+    ogprice = stock[2]
+    currprice = stock[3]
+    lpercent = stock[4]
+    owner = stock[5]
+    ownername = owner
+    cur.execute("SELECT Username FROM user_info WHERE UserID = %d" % ownername)
+    ownername = cur.fetchone()[0]
+    status = stock[6]
+    sprice = stock[7]
+    if status == 1:
+        status = "On sale"
+    else:
+        status = "Not for sale"
+        sprice = "Ekki til sölu"
+    cur.execute("SELECT COUNT(StockID) FROM stock WHERE UserID = %d" %userid)
+    max_id = cur.fetchone()[0]
+    nid = id + 1
+    lid = id - 1
+    if max_id < nid:
+        nid = id
+    if usedid == 0:
+        lid = 1
+    #loka connectioninu
+    cur.close()
+    conn.close()
+    return template('minstocks.tpl', name = name, cash = cash, value = value, sname = sname, ogprice = ogprice,
+                    currprice = currprice, lpercent = lpercent, owner = ownername, status = status, sprice = sprice,
+                    nid = nid, lid = lid)
 @route('/admin')
 def admin():
     return template('admin.tpl')
