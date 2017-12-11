@@ -1,0 +1,58 @@
+Used to change Values but don´t need if making table from scratch since now it defaults to this value
+UPDATE stock
+SET UserID = 4;
+Updating Total Value to the correct Value, If creating the database from scratch this is not needed as it was added as an default value
+UPDATE user
+SET total_value = 100000;
+
+Trigger that updates total cash as well as ownership of a stock once a stock is sold
+USE 1503953219_lokaverkefni_3_onn //
+create trigger update_ownership
+after insert on transaction
+for each row 
+begin      		  
+       	UPDATE user
+	SET Current_Cash = Current_Cash + new.Price
+	WHERE UserID = new.SellerID;
+	UPDATE user
+	SET Current_Cash = Current_Cash - new.Price 
+	WHERE UserID = new.BuyerID; 
+       	UPDATE stock          
+        set UserID = new.BuyerID
+	WHERE StockID = new.StockID;
+       	UPDATE stock          
+        SET Status = 0
+	WHERE StockID = new.StockID;
+end ; //
+
+Trigger that updates Total_value of the buyer after a stock is sold
+USE 1503953219_lokaverkefni_3_onn //
+create trigger update_total_value
+after update on stock
+for each row 
+begin      
+		UPDATE user
+		SET total_value = (SELECT SUM(Current_market_price)
+		FROM stock
+		WHERE stock.UserID = new.UserID) + Current_Cash
+		WHERE user.UserID = new.UserID;		  	      
+end ; //
+
+Trigger that updates Total_value of the seller after a stock is sold
+USE 1503953219_lokaverkefni_3_onn //
+create trigger update_seller_total_value
+after update on stock
+for each row 
+begin      
+		if (SELECT COUNT(StockID) FROM stock WHERE stock.UserID = old.UserID) > 0 THEN
+			UPDATE user
+			SET total_value = (SELECT SUM(Current_market_price)
+			FROM stock
+			WHERE stock.UserID = old.UserID) + Current_Cash
+			WHERE user.UserID = old.UserID;	
+		ELSE
+			UPDATE user
+			SET total_value = Current_Cash
+			WHERE user.UserID = old.UserID;	
+		end if; 	  	      
+end ; //
