@@ -94,6 +94,7 @@ def login():
             cur.execute("SELECT UserID FROM User_info WHERE Username =  '%s'" %(username))
             global userid
             userid=cur.fetchone()[0]
+            response.set_cookie("UserID",str(userid),expires=timabil)
             #birti síða þar sem notanda tókst að logga inn
             redirect('/stocks/1')
     #ef að return var ekki gefið í for loop þá þýðir það að við erum komnir hingað
@@ -120,7 +121,7 @@ def stocks(id):
                            db='1503953219_lokaverkefni_3_onn')
     cur = conn.cursor()
     #Sækja upplýsingar um notendann og set pening sem global breytu þar sem við gætum þurft að nota hana seinna
-    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %userid)
+    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %request.get_cookie("UserID"))
     userinfo = cur.fetchone()
     name = userinfo[0]
     global cash
@@ -183,7 +184,7 @@ def kaupa():
         conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
                                db='1503953219_lokaverkefni_3_onn')
         cur = conn.cursor()
-        cur.execute("INSERT INTO transaction(Price, BuyerID, SellerID, StockID) Values('{}','{}','{}', '{}')".format(sprice, userid, owner, sid))
+        cur.execute("INSERT INTO transaction(Price, BuyerID, SellerID, StockID) Values('{}','{}','{}', '{}')".format(sprice, request.get_cookie("UserID"), owner, sid))
         conn.commit()
         return '''Kaup staðfest! <a href="/stocks/%d">Fara til baka</a>''' %sid
 @route('/minbref/<id:int>')
@@ -193,14 +194,14 @@ def minbref(id):
                            db='1503953219_lokaverkefni_3_onn')
     cur = conn.cursor()
     #Sækja upplýsingar um notendann
-    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %userid)
+    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %request.get_cookie("UserID"))
     userinfo = cur.fetchone()
     name = userinfo[0]
     cash = userinfo[1]
     value = userinfo[2]
     #Sækja upplýsingar um það hlutabréf sem er til skoðunar
     cur.execute("SELECT StockID, Name, Original_market_price, Current_market_price, Last_percent_change, UserID, Status, "
-    + "Sale_price FROM stock WHERE UserID = %d" %userid)
+    + "Sale_price FROM stock WHERE UserID = %d" %request.get_cookie("UserID"))
     usedid = id - 1
     stock=cur.fetchall()[usedid]
     print(stock)
@@ -221,7 +222,7 @@ def minbref(id):
     else:
         status = "Not for sale"
         sprice = "Ekki til sölu"
-    cur.execute("SELECT COUNT(StockID) FROM stock WHERE UserID = %d" %userid)
+    cur.execute("SELECT COUNT(StockID) FROM stock WHERE UserID = %d" %request.get_cookie("UserID"))
     max_id = cur.fetchone()[0]
     nid = id + 1
     lid = id - 1
