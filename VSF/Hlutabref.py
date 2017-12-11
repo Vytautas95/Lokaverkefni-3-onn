@@ -204,6 +204,7 @@ def minbref(id):
     usedid = id - 1
     stock=cur.fetchall()[usedid]
     print(stock)
+    global sid
     sid = stock[0]
     sname = stock[1]
     ogprice = stock[2]
@@ -234,6 +235,16 @@ def minbref(id):
     return template('minstocks.tpl', name = name, cash = cash, value = value, sname = sname, ogprice = ogprice,
                     currprice = currprice, lpercent = lpercent, owner = ownername, status = status, sprice = sprice,
                     nid = nid, lid = lid)
+@route('/selja', method='POST')
+def selja():
+    price = int(request.forms.get('price'))
+    # tengjast við gagnagrunninn
+    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
+                               db='1503953219_lokaverkefni_3_onn')
+    cur = conn.cursor()
+    cur.execute("UPDATE Stock SET Status = 1, Sale_price = '{}' WHERE StockID = '{}'".format(price, sid))
+    conn.commit()
+    redirect('/minbref/%d'%sid)
 @route('/admin')
 def admin():
     return template('admin.tpl')

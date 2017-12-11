@@ -28,6 +28,7 @@
 <h2>Eigandi: {{owner}}</h2>
 <h2>Verð: {{sprice}}</h2>
 <form action="/selja" method='POST'>
+	<input type="number" name="price">
 	<input value="Setja á sölu" type="submit">
 </form>
 <p><a href="/minbref/{{lid}}">Skoða seinasta</a> <a href="/minbref/{{nid}}">Skoða næsta</a></p>

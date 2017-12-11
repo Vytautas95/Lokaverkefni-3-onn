@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="57db2b6c-bcfe-44c8-90a5-41f4daad7346" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/VSF/Hlutabref.py" afterPath="$PROJECT_DIR$/VSF/Hlutabref.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/VSF/views/stocks.tpl" afterPath="$PROJECT_DIR$/VSF/views/stocks.tpl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/VSF/views/minstocks.tpl" afterPath="$PROJECT_DIR$/VSF/views/minstocks.tpl" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +21,8 @@
       <file leaf-file-name="Hlutabref.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/VSF/Hlutabref.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="101" column="16" lean-forward="true" selection-start-line="101" selection-start-column="16" selection-end-line="101" selection-end-column="16" />
+            <state relative-caret-position="267">
+              <caret line="244" column="97" lean-forward="false" selection-start-line="244" selection-start-column="97" selection-end-line="244" selection-end-column="97" />
               <folding>
                 <element signature="e#106#120#0" expanded="true" />
               </folding>
@@ -306,7 +306,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="0" width="976" height="1038" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947807" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -347,8 +347,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/VSF/Hlutabref.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="101" column="16" lean-forward="true" selection-start-line="101" selection-start-column="16" selection-end-line="101" selection-end-column="16" />
+        <state relative-caret-position="267">
+          <caret line="244" column="97" lean-forward="false" selection-start-line="244" selection-start-column="97" selection-end-line="244" selection-end-column="97" />
           <folding>
             <element signature="e#106#120#0" expanded="true" />
           </folding>
