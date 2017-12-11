@@ -281,4 +281,4 @@ def stocks():
 def static(filename):
     return static_file(filename, root='./static')
 
-run(host = '0.0.0.0', port=os.environ.get('PORT'))
+run()
