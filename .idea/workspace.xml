@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="57db2b6c-bcfe-44c8-90a5-41f4daad7346" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/VSF/Hlutabref.py" afterPath="$PROJECT_DIR$/VSF/Hlutabref.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +20,8 @@
       <file leaf-file-name="Hlutabref.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/VSF/Hlutabref.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2992">
-              <caret line="181" column="35" lean-forward="false" selection-start-line="181" selection-start-column="35" selection-end-line="181" selection-end-column="35" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
               <folding>
                 <element signature="e#106#120#0" expanded="true" />
               </folding>
@@ -352,8 +351,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/VSF/Hlutabref.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2992">
-          <caret line="181" column="35" lean-forward="false" selection-start-line="181" selection-start-column="35" selection-end-line="181" selection-end-column="35" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
           <folding>
             <element signature="e#106#120#0" expanded="true" />
           </folding>
