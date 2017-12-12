@@ -27,11 +27,17 @@
 <h2>Síðasta prósentu breyting: {{lpercent}}%</h2>
 <h2>Eigandi: {{owner}}</h2>
 <h2>Verð: {{sprice}}</h2>
-<form action="/selja" method='POST'>
-	<input type="number" name="price">
-	<input value="Setja á sölu" type="submit">
-</form>
-<p><a href="/minbref/{{lid}}">Skoða seinasta</a> <a href="/minbref/{{nid}}">Skoða næsta</a></p>
+%if sprice == "Ekki til sölu":
+	<form action="/selja" method='POST'>
+		Verð<input type="number" name="price">
+		<input value="Setja á sölu" type="submit">
+	</form>
+	<p><a href="/minbref/{{lid}}">Skoða seinasta</a> <a href="/minbref/{{nid}}">Skoða næsta</a></p>
+%else:
+	<form action="/ekkiselja" method='POST'>
+		<input value="Taka af sölu" type="submit">
+	</form>
+	<p><a href="/minbref/{{lid}}">Skoða seinasta</a> <a href="/minbref/{{nid}}">Skoða næsta</a></p>
 
 </body>
 </html>

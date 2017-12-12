@@ -207,6 +207,8 @@ def minbref(id):
     #Sækja upplýsingar um það hlutabréf sem er til skoðunar
     cur.execute("SELECT StockID, Name, Original_market_price, Current_market_price, Last_percent_change, UserID, Status, "
     + "Sale_price FROM stock WHERE UserID = %d" %int(request.get_cookie("UserID")))
+    global backid
+    backid = id
     usedid = id - 1
     stock=cur.fetchall()[usedid]
     global sid
@@ -251,7 +253,18 @@ def selja():
     conn.commit()
     cur.close()
     conn.close()
-    redirect('/minbref/%d'%sid)
+    redirect('/minbref/%d'%backid)
+@route('/ekkiselja', method='POST')
+def ekkiselja():
+    # tengjast við gagnagrunninn
+    conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
+                               db='1503953219_lokaverkefni_3_onn')
+    cur = conn.cursor()
+    cur.execute("UPDATE Stock SET Status = 0 WHERE StockID = '{}'".format(sid))
+    conn.commit()
+    cur.close()
+    conn.close()
+    redirect('/minbref/%d'%backid)
 @route('/admin')
 def admin():
     return template('admin.tpl')
