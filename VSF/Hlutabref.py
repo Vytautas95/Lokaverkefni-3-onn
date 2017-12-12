@@ -92,9 +92,11 @@ def login():
             response.set_cookie("login",row[1],expires=timabil)
             response.set_cookie("password",row[2],expires=timabil)
             cur.execute("SELECT UserID FROM User_info WHERE Username =  '%s'" %(username))
-            global userid
             userid=cur.fetchone()[0]
+            conn.commit()
             response.set_cookie("UserID",str(userid),expires=timabil)
+            cur.close()
+            conn.close()
             #birti síða þar sem notanda tókst að logga inn
             redirect('/stocks/1')
     #ef að return var ekki gefið í for loop þá þýðir það að við erum komnir hingað
@@ -121,7 +123,7 @@ def stocks(id):
                            db='1503953219_lokaverkefni_3_onn')
     cur = conn.cursor()
     #Sækja upplýsingar um notendann og set pening sem global breytu þar sem við gætum þurft að nota hana seinna
-    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %request.get_cookie("UserID"))
+    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %int(request.get_cookie("UserID")))
     userinfo = cur.fetchone()
     name = userinfo[0]
     global cash
@@ -173,9 +175,10 @@ def stocks(id):
     return template('stocks.tpl', name = name, cash = cash, value = value, sname = sname, ogprice = ogprice,
                     currprice = currprice, lpercent = lpercent, owner = ownername, status = status, sprice = sprice,
                     nid = nid, lid = lid)
-@route('/kaupa', method='POST')
+@route('/kaupa', method='POST', encoding="Unicode UTF-8")
 def kaupa():
-    if sprice == "Ekki til Sölu":
+    print(sprice)
+    if sprice == "Ekki til sölu":
         return '''Þetta hlutabréf er ekki til sölu <a href="/stocks/%d">Fara til baka</a> ''' %sid
     elif sprice > cash:
         return '''Þú átt ekki nóg af pening til að kaupa þetta hlutabréf <a href="/stocks/%d">Fara til baka</a> ''' %sid
@@ -184,8 +187,10 @@ def kaupa():
         conn = pymysql.connect(host='tsuts.tskoli.is', port=3306, user='1503953219', passwd='mypassword',
                                db='1503953219_lokaverkefni_3_onn')
         cur = conn.cursor()
-        cur.execute("INSERT INTO transaction(Price, BuyerID, SellerID, StockID) Values('{}','{}','{}', '{}')".format(sprice, request.get_cookie("UserID"), owner, sid))
+        cur.execute("INSERT INTO transaction(Price, BuyerID, SellerID, StockID) Values('{}','{}','{}', '{}')".format(sprice, int(request.get_cookie("UserID")), owner, sid))
         conn.commit()
+        cur.close()
+        conn.close()
         return '''Kaup staðfest! <a href="/stocks/%d">Fara til baka</a>''' %sid
 @route('/minbref/<id:int>')
 def minbref(id):
@@ -194,17 +199,16 @@ def minbref(id):
                            db='1503953219_lokaverkefni_3_onn')
     cur = conn.cursor()
     #Sækja upplýsingar um notendann
-    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %request.get_cookie("UserID"))
+    cur.execute("SELECT Username, Current_Cash, Total_Value FROM user_info, user WHERE (user.UserID = user_info.UserID) AND user.UserID = %d" %int(request.get_cookie("UserID")))
     userinfo = cur.fetchone()
     name = userinfo[0]
     cash = userinfo[1]
     value = userinfo[2]
     #Sækja upplýsingar um það hlutabréf sem er til skoðunar
     cur.execute("SELECT StockID, Name, Original_market_price, Current_market_price, Last_percent_change, UserID, Status, "
-    + "Sale_price FROM stock WHERE UserID = %d" %request.get_cookie("UserID"))
+    + "Sale_price FROM stock WHERE UserID = %d" %int(request.get_cookie("UserID")))
     usedid = id - 1
     stock=cur.fetchall()[usedid]
-    print(stock)
     global sid
     sid = stock[0]
     sname = stock[1]
@@ -222,7 +226,7 @@ def minbref(id):
     else:
         status = "Not for sale"
         sprice = "Ekki til sölu"
-    cur.execute("SELECT COUNT(StockID) FROM stock WHERE UserID = %d" %request.get_cookie("UserID"))
+    cur.execute("SELECT COUNT(StockID) FROM stock WHERE UserID = %d" %int(request.get_cookie("UserID")))
     max_id = cur.fetchone()[0]
     nid = id + 1
     lid = id - 1
@@ -245,6 +249,8 @@ def selja():
     cur = conn.cursor()
     cur.execute("UPDATE Stock SET Status = 1, Sale_price = '{}' WHERE StockID = '{}'".format(price, sid))
     conn.commit()
+    cur.close()
+    conn.close()
     redirect('/minbref/%d'%sid)
 @route('/admin')
 def admin():
@@ -264,6 +270,8 @@ def bots():
     for x in range(botsfj):
         y=Bots(nr, upperrisk,lowerrisk, buyrisk)
         y.newbot()
+    cur.close()
+    conn.close()
     return '''Skráning tókst!, <a href="/admin">Fara til baka</a>"'''
 
 @route('/stocks', method='POST')
