@@ -291,4 +291,5 @@ def static(filename):
     return static_file(filename, root='./static')
 
 
-run()
+run(host = '0.0.0.0', port=os.environ.get('PORT'))
+
